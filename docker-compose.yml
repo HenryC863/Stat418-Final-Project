@@ -1,8 +1,0 @@
-services:
-  app:
-    build : .
-    volumes:
-     - .:/server
-    ports:
-     - 5050:5050
-
