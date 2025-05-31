@@ -4,5 +4,5 @@ services:
     volumes:
      - .:/server
     ports:
-     - 5050:5050
+     - 6000:6000
 
