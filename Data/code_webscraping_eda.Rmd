@@ -1,0 +1,103 @@
+---
+title: "stat_418_Final_Project"
+author: "Gaohong Chen"
+date: "2025-05-02"
+output: pdf_document
+---
+
+
+```{r}
+library(httr)
+library(jsonlite)
+library(dplyr)
+library(corrplot)
+
+url <- paste0(
+  "https://api.census.gov/data/timeseries/idb/5year?",
+  "key=", "eac1e11f909802a93ae6d0fcc1b8cbe987f6a5df",
+  "&get=GENC,POP,GR,RNI,POP_DENS,TFR,CBR,E0,IMR,CDR",
+  "&YR=2024",
+  "&for=genc+standard+countries+and+areas:",
+  "AF,AL,DZ,AS,AD,AO,AI,AG,AR,AM,AW,AU,AT,AZ,BS,BH,BD,BB,BY,BE,BZ,BJ,BM,BT,BO,BA,BW,BR,BN,BG,BF,MM,BI,CV,KH,CM,CA,KY,CF,TD,CL,CN,CO,KM,CG,CD,CK,CR,CI,HR,CU,CW,CY,CZ,DK,DJ,DM,DO,EC,EG,SV,GQ,ER,EE,SZ,ET,FO,FJ,FI,FR,PF,GA,GM,XG,GE,DE,GH,GI,GR,GL,GD,GU,GT,GG,GN,GW,GY,HT,HN,HK,HU,IS,IN,ID,IR,IQ,IE,IM,IL,IT,JM,JP,JE,JO,KZ,KE,KI,KP,KR,XK,KW,KG,LA,LV,LB,LS,LR,LY,LT,LU,MO,MG,MW,MY,MV,ML,MT,MH,MR,MU,MX,FM,MD,MC,MN,ME,MS,MA,MZ,NA,NR,NP,NL,NC,NZ,NI,NE,NG,MK,MP,NO,OM,PK,PW,PA,PG,PY,PE,PH,PL,PT,PR,QA,RO,RU,RW,BL,SH,KN,LC,MF,PM,VC,WS,SM,ST,SA,SN,RS,SC,SL,SG,SX,SK,SI,SB,SO,ZA,SS,ES,LK,SD,SR,SE,CH,SY,TW,TJ,TZ,TH,TL,TG,TO,TT,TN,TR,TM,TC,TV,UG,UA,AE,GB,US,UY,UZ,VU,VE,VN,VG,VI,WF,XW,YE,ZM,ZW"
+)
+
+# Request and parse
+response <- GET(url)
+json_data <- fromJSON(content(response, "text"))
+
+# Convert to DataFrame
+df <- as.data.frame(json_data[-1, ], stringsAsFactors = FALSE)
+colnames(df) <- json_data[1, ]
+
+df <- df[,-12]
+
+df <- df %>%
+  rename(
+    GENC = GENC,
+    Year = YR,
+    Population = POP,
+    `Annual Growth Rate` = GR,
+    `Rate of Natural Increase` = RNI,
+    `Population Density` = POP_DENS,
+    `Total Fertility Rate` = TFR,
+    `Crude Birth Rate` = CBR,
+    `Life Expectancy` = E0,
+    `Infant Mortality Rate` = IMR,
+    `Crude Death Rate` = CDR
+)
+
+df <- df %>%
+  select(
+    Population,
+    `Annual Growth Rate`,
+    `Population Density`,
+    `Total Fertility Rate`,
+    `Infant Mortality Rate`,
+    `Crude Death Rate`,
+    `Life Expectancy`
+  ) %>%
+  mutate(across(everything(), ~as.numeric(.)))
+
+# Preview
+head(df)
+
+write.csv(df, "cleaned_data.csv", row.names = FALSE)
+
+```
+
+```{r}
+# the Distribution of Life Expectancy at Birth
+hist(
+  as.numeric(df$`Life Expectancy`),
+  main = "Distribution of Life Expectancy at Birth",
+  xlab = "Life Expectancy (in Years)"
+)
+```
+```{r}
+# Infant Mortality vs. Life Expectancy
+plot(
+  df$`Life Expectancy`,
+  df$`Infant Mortality Rate`,
+  xlab = "Life Expectancy at Birth (Years)",
+  ylab = "Infant Mortality Rate",
+  main = "Infant Mortality vs. Life Expectancy"
+)
+```
+```{r}
+# summary statistic
+summary(df)
+```
+```{r}
+# Compute correlation matrix
+cor_matrix <- cor(df, use = "complete.obs")
+
+# Plot correlation chart
+corrplot(cor_matrix,
+         method = "circle",       
+         type = "upper",          
+         order = "hclust",        
+         addCoef.col = "black",  
+         tl.col = "black",        
+         tl.cex = 0.8)            
+```
+
