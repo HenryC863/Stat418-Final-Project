@@ -10,4 +10,6 @@ curl -X POST https://final-project-flask-app-693104809772.us-central1.run.app/pr
     "Infant Mortality Rate": 20,
     "Crude Death Rate": 8
 }'
+
+{"predicted life expectancy":74.78086113064549}
 ```
