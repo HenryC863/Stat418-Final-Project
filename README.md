@@ -28,6 +28,8 @@ Raw JSON responses were processed and converted into a clean tabular dataset usi
 
 ## Exploratory Data Analysis (EDA)
 
+To better understand the characteristics of the dataset, below is an overview of the exploratory data analysis (EDA).
+
 <img src="images/life_expectancy_distribution_highres.png" width="60%" />
 
 Most countries around the world have a life expectancy at birth between 70 and 80 years, indicating generally good health conditions in many regions. A smaller group of countries falls below 65 years, likely due to challenges like limited access to healthcare or higher infant mortality rates. On the other hand, a few countries boast life expectancies exceeding 85 years. Overall, the distribution is slightly left-skewed.
@@ -73,8 +75,8 @@ curl -X POST http://localhost:8080/predict_price \
   }'
 
 ```
-### Assessing the FLASK API throngh GOOGLE CLOUD
-The predictive model is hosted on GOOGLE CLOUD and it is accessible use the following curl commmand:
+### Assessing the FLASK API through GOOGLE CLOUD
+The predictive model is hosted on GOOGLE CLOUD and it is accessible using the following curl command:
 
 ```
 curl -X POST https://final-project-flask-app-693104809772.us-central1.run.app/predict_price \
@@ -93,4 +95,26 @@ Then you will receive the following response:
 {"predicted life expectancy":74.78086113064549}
 ```
 
-## Result
+## Results
+The Shiny app offers an interactive interface that enables users to estimate life expectancy based on key demographic indicators. Users can select a country (for reference only) and input values. 
+Once the data is entered, clicking the Predict button sends the input to a deployed Flask API hosted on Google Cloud Run, which returns the predicted life expectancy in years. 
+This interface enables users to explore how changes in demographic factors affect life expectancy, making it a valuable and informative tool for understanding global health trends.
+
+<img src="images/shinyApp.png" width="60%" />
+
+### App Workflow
+The diagram below shows how the Shiny app interacts with the Flask API to generate a life expectancy prediction:
+
+```
++-------------+      +-----------+      +--------------------------+      +----------------------------+
+| User Input  | ---> | Shiny UI  | ---> | Flask API (Google Cloud) | ---> |Life Expectancy Prediction  |
++-------------+      +-----------+      +--------------------------+      +----------------------------+
+```
+1. **User Input**: The user enters demographic data into the Shiny interface.
+2. **Shiny UI**: The frontend collects and sends the data.
+3. **Flask API (Google Cloud)**: The backend receives the data, runs the model, and returns a prediction.
+4. **Life Expectancy Prediction**: The result is displayed back to the user in the app.
+
+                                           
+
+
