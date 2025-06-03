@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project is the final assignment for STAT 418. It aims to predict **Life Expectancy at Birth** (`E0`) for various countries using publicly available demographic indicators. The model is both practical and straightforward, with real-world applications in population. It features an end-to-end pipeline: **data collection**, **model building**, **exploratory analysis**, and **interactive deployment** via a web app and Flask API.
+This project presents an interactive Shiny application that predicts Life Expectancy at Birth (E₀) based on user-provided demographic inputs. Built using a clean end-to-end pipeline, the app allows users to explore how variables such as fertility rates, infant mortality, and population growth affect life expectancy. Behind the scenes, a Flask API hosted on Google Cloud processes the input and returns a real-time prediction using a regression model trained on publicly available data. The goal is to provide an intuitive tool that connects data-driven insights with a user-friendly interface.
 
 - Link to Shiny APP: [Shiny App](https://gaohongc.shinyapps.io/life_expectancy/)
 
