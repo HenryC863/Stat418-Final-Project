@@ -1,4 +1,5 @@
 # 🌍 Predicting Life Expectancy From Country Demographic
+## By: Gaohong Chen
 
 ## Project Overview
 
